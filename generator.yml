@@ -1,0 +1,120 @@
+modules:
+  pfsense:
+    walk:
+      - 1.3.6.1.2.1.25               # hostResourcesMibModule - The Host Resourcers MIB defines a uniform set of objects useful for the management of host computers.
+      - 1.3.6.1.2.1.31               # ifMib - network interface sub-layers
+      - 1.3.6.1.2.1.2                # interfaces - information about each interface
+      - 1.3.6.1.2.1.1                # system - information about the system
+      - 1.3.6.1.2.1.11               # snmp
+      - 1.3.6.1.4.1.2021             # ucdavis - University of California, Davis **INTERESTING** CPU, Storage, memory info
+      - 1.3.6.1.4.1.12325.1.202      # additional HOST-RESOURCES data
+      - 1.3.6.1.4.1.12325.1.200.1.1  # pfStatus
+      - 1.3.6.1.4.1.12325.1.200.1.2  # pfCounter
+      - 1.3.6.1.4.1.12325.1.200.1.3  # pfStateTable
+      #not interesting
+      - 1.3.6.1.4.1.12325.1.200.1.4  # pfSrcNodes
+      - 1.3.6.1.4.1.12325.1.200.1.5  # pfLimits
+      - 1.3.6.1.4.1.12325.1.200.1.6  # pfTimeouts
+      # interesting
+      - 1.3.6.1.4.1.12325.1.200.1.7  # pfLogInterface
+      - 1.3.6.1.4.1.12325.1.200.1.8  # pfInterfaces
+      #too much data
+      - 1.3.6.1.4.1.12325.1.200.1.9  # pfTables
+      #not interesting
+      - 1.3.6.1.4.1.12325.1.200.1.10 # pfAltq
+      # interesting
+      - 1.3.6.1.4.1.12325.1.200.1.11 # pfLabels
+      - 1.3.6.1.4.1.12325.1.205      # Begemot managing bridge interfaces.
+      - 1.3.6.1.4.1.12325.1.1        # Begemot SNMP daemon.
+      - 1.3.6.1.4.1.12325.1.3        # Begemot IP stuff that is not in the official IP MIBs.
+      - 1.3.6.1.4.1.12325.1.210      # Begemot IEEE802.11 interfaces
+      - 1.3.6.1.4.1.12325.1.220      # Begemot HAST ???
+      - 1.3.6.1.4.1.12325.1.2        # Begemot NetGraph access module
+      - 1.3.6.1.4.1.12325.1.101      # Begemot ATM interfaces. ???
+      - 1.3.6.1.6.3.1                # snmpAlarmNextIndex - snmpAlarmTabl
+    overrides:
+      ifRcvAddressStatus:
+        ignore: true
+      ifRcvAddressType:
+        ignore: true
+      begemotIfMaxspeed:
+        ignore: true
+      begemotHrPkgDir:
+        type: DisplayString
+      begemotSnmpdLocalPortStatus:
+        type: DisplayString
+      begemotSnmpdLocalPortType:
+        type: DisplayString
+      begemotSnmpdModuleComment:
+        type: DisplayString
+      begemotSnmpdModulePath:
+        type: DisplayString
+      begemotSnmpdTransportOid:
+        type: DisplayString
+      begemotSnmpdTransportStatus:
+        type: DisplayString
+      hrFSMountPoint:
+        type: DisplayString
+      hrSWInstalledName:
+        type: DisplayString
+      hrSWRunName:
+        type: DisplayString
+      hrSWRunParameters:
+        ignore: true
+        type: DisplayString
+        # Paramaters for individual commands run
+      hrSWRunPath:
+        ignore: true
+        type: DisplayString
+        # Full path to program
+      hrSystemInitialLoadParameters:
+        type: DisplayString
+      pfInterfacesIfDescr:
+        type: DisplayString
+      pfLabelsLblName:
+        type: DisplayString
+    lookups:
+      - source_indexes:
+        - begemotNgNodeId
+        lookup: begemotNgNodeName
+        drop_source_indexes: false
+      - source_indexes:
+        - dskIndex
+        lookup: dskPath
+        drop_source_indexes: true
+      - source_indexes:
+        - hrDeviceIndex
+        lookup: hrDeviceDescr
+        drop_source_indexes: false
+      - source_indexes:
+        - hrFSIndex
+        lookup: hrFSMountPoint
+        drop_source_indexes: true
+      - source_indexes:
+        - hrSWRunIndex
+        lookup: hrSWRunName
+        drop_source_indexes: false
+      - source_indexes:
+        - hrStorageIndex
+        lookup: hrStorageDescr
+        drop_source_indexes: false
+      - source_indexes:
+        - ifIndex
+        lookup: ifName
+        drop_source_indexes: true
+      - source_indexes:
+        - laIndex
+        lookup: laNames
+        drop_source_indexes: true
+      - source_indexes:
+        - pfInterfacesIfIndex
+        lookup: pfInterfacesIfDescr
+        drop_source_indexes: true
+      - source_indexes:
+        - pfLabelsLblIndex
+        lookup: pfLabelsLblName
+        drop_source_indexes: false
+      - source_indexes:
+        - sysORIndex
+        lookup: sysORDescr
+        drop_source_indexes: true
